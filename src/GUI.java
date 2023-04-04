@@ -24,7 +24,6 @@ public class GUI {
     private JPanel panel1;
     private JButton button2;
     private JButton button3;
-    private JTextArea textArea2;
     private JButton button4;
     private JButton button5;
     private JButton button6;
@@ -81,19 +80,6 @@ public class GUI {
         menu.add(menuItem);
 
 
-
-        //a group of radio button menu items
-
-
-
-
-        //a group of check box menu items
-
-
-
-        //a submenu
-
-
         //Build second menu in the menu bar.
         menu = new JMenu("Another Menu");
         menu.setMnemonic(KeyEvent.VK_N);
@@ -105,7 +91,8 @@ public class GUI {
     }
 
     public void open(){
-        String filename = "text.txt";
+        String filename = JOptionPane.showInputDialog("Vilken fil vill du öppna");
+        filename = filename+".txt";
         BufferedReader in = null;
         try {
             in = new BufferedReader(new FileReader(filename));
@@ -123,29 +110,38 @@ public class GUI {
         } catch (IOException ex) {
             textArea1.setText("");
         }
+        textArea1.repaint();
     }
 
 
+public void search() {
+       String ord = JOptionPane.showInputDialog("Sök");
+       String text = textArea1.getText();
+       textArea1.select(3,6);
 
+}
 
     public void save() {
-        String filename = "text.txt";
+        String filename = JOptionPane.showInputDialog("Vad vill du spara filen som");
+        filename = filename + ".txt";
         PrintWriter out = null;
         try {
             out = new PrintWriter(new BufferedWriter(new FileWriter(filename)));
+            String text = textArea1.getText();
+            out.println(text);
+            out.flush();
+            out.close();
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null,"Failed to Save!");
+            JOptionPane.showMessageDialog(null, "Failed to Save!");
+            e.printStackTrace();
         }
-        System.out.println(textArea1.getText());
-        out.println(textArea1.getText());
-        out.flush();
-        out.close();
+        textArea1.repaint();
     }
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("GUI");
         GUI gui = new GUI();
-        frame.setContentPane(new GUI().panel1);
+        frame.setContentPane(gui.panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setJMenuBar(gui.createMenuBar());
         frame.pack();
